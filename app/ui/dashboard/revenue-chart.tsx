@@ -8,17 +8,13 @@ import { Revenue } from '@/app/lib/definitions';
 // https://www.tremor.so/
 // https://www.chartjs.org/
 // https://airbnb.io/visx/
-
-export default async function RevenueChart({
-  revenue,
-}: {
-  revenue: Revenue[];
-}) {
+import { fetchRevenue } from '@/app/lib/data';
+export default async function RevenueChart() { // Make component async, remove the props
+  const revenue = await fetchRevenue(); // Fetch data inside the component
+ 
   const chartHeight = 350;
-  // NOTE: Uncomment this code in Chapter 7
-
   const { yAxisLabels, topLabel } = generateYAxis(revenue);
-
+ 
   if (!revenue || revenue.length === 0) {
     return <p className="mt-4 text-gray-400">No data available.</p>;
   }
