@@ -27,7 +27,7 @@ export default async function InvoicesTable({
                   <div>
                     <div className="mb-2 flex items-center">
                       <Image
-                        src={invoice.image_url}
+                        src={invoice.image_url || '/avatar.jpg'}
                         className="mr-2 rounded-full"
                         width={28}
                         height={28}
