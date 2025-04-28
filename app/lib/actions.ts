@@ -108,21 +108,31 @@ export async function deleteInvoice(id: string) {
   await sql`DELETE FROM invoices WHERE id = ${id}`;
   revalidatePath('/dashboard/invoices');
 }
+function isAuthError(error: any): error is AuthError {
+  return error instanceof AuthError;
+}
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
 ) {
   try {
+    // Attempt to sign in with credentials
     await signIn('credentials', formData);
   } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
+    // Use the custom type guard to check if the error is an AuthError
+    if (isAuthError(error)) {
+      // If the error is an AuthError, handle it based on its message or other properties
+      if (error.message) {
+        // Check for specific error messages
+        if (error.message.includes('CredentialsSignin')) {
           return 'Invalid credentials.';
-        default:
-          return 'Something went wrong.';
+        }
       }
+      // Fallback message in case the message doesn't contain the specific error
+      return 'Something went wrong during authentication.';
     }
+    // Re-throw the error if it's not an AuthError
     throw error;
   }
 }
