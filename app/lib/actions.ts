@@ -119,7 +119,7 @@ export async function authenticate(
   try {
     // Attempt to sign in with credentials
     await signIn('credentials', formData);
-  } catch (error) {
+  } catch (error:unknown) {
     // Use the custom type guard to check if the error is an AuthError
     if (isAuthError(error)) {
       // If the error is an AuthError, handle it based on its message or other properties
